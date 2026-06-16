@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Inkwell List — Join readers across 9 neighbourhoods</title>
+  <meta name="description" content="Join The Inkwell List and get €5 off your next book. Curated picks, digital loyalty, zero spam.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --navy:#1A2A3A;--warm-paper:#F5F0E8;--deep-gold:#C9A84C;--cream-white:#FAF8F4;
+      --charcoal:#2D2D2D;--warm-grey:#6B6B6B;--burgundy:#7A2E3B;--success-green:#3A7D5A;
+      --font-head:'Playfair Display',Georgia,'Times New Roman',serif;
+      --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      --max-w:1200px;--radius:12px;--radius-sm:8px;--shadow:0 4px 24px rgba(26,42,58,0.12);
+      --shadow-lg:0 8px 40px rgba(26,42,58,0.18);
+    }
+    html{scroll-behavior:smooth;scroll-padding-top:72px}
+    body{
+      font-family:var(--font-body);color:var(--charcoal);background:var(--warm-paper);
+      line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    }
+    img{max-width:100%;display:block}
+    a{color:var(--deep-gold);text-decoration:none;transition:color .25s}
+    a:hover{color:var(--navy)}
+    .container{width:100%;max-width:var(--max-w);margin:0 auto;padding:0 20px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+    /* NAV */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      padding:14px 0;transition:background .3s,box-shadow .3s,backdrop-filter .3s;
+    }
+    nav.scrolled{background:rgba(26,42,58,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,0.08)}
+    nav .container{display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:var(--font-head);font-size:1.4rem;font-weight:600;color:var(--cream-white);letter-spacing:-0.02em}
+    .logo span{color:var(--deep-gold)}
+    .logo-link{color:inherit;text-decoration:none}
+    .nav-cta{
+      font-family:var(--font-body);font-size:.85rem;font-weight:600;color:var(--cream-white);
+      background:var(--deep-gold);border:none;border-radius:100px;padding:10px 22px;
+      cursor:pointer;transition:background .25s,transform .2s;min-height:48px;
+    }
+    .nav-cta:hover{background:var(--navy);color:var(--cream-white);transform:translateY(-1px)}
+    .hamburger{
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
+      background:none;border:none;cursor:pointer;width:48px;height:48px;gap:5px;
+      padding:8px;min-height:48px;min-width:48px;
+    }
+    .hamburger span{display:block;width:22px;height:2px;background:var(--cream-white);border-radius:2px;transition:transform .3s,opacity .3s}
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+    .hamburger.active span:nth-child(2){opacity:0}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+    /* mobile nav overlay */
+    .nav-overlay{
+      position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,42,58,0.98);
+      z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:32px;opacity:0;pointer-events:none;transition:opacity .35s;
+    }
+    .nav-overlay.open{opacity:1;pointer-events:auto}
+    .nav-overlay a{
+      font-family:var(--font-head);font-size:1.5rem;color:var(--cream-white);
+      text-decoration:none;transition:color .25s;min-height:48px;display:flex;align-items:center;
+    }
+    .nav-overlay a:hover{color:var(--deep-gold)}
+
+    /* HERO */
+    .hero{
+      position:relative;min-height:100dvh;display:flex;align-items:center;justify-content:center;
+      overflow:hidden;padding:100px 0 60px;
+    }
+    .hero-bg{
+      position:absolute;inset:0;z-index:0;
+      background:var(--navy);
+      background-image:url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1200&q=80');
+      background-size:cover;background-position:center 30%;
+    }
+    .hero-bg::after{
+      content:'';position:absolute;inset:0;
+      background:
+        linear-gradient(135deg,rgba(26,42,58,0.92) 0%,rgba(26,42,58,0.65) 50%,rgba(26,42,58,0.88) 100%),
+        linear-gradient(to top,rgba(26,42,58,0.4) 0%,transparent 50%);
+    }
+    .hero-content{position:relative;z-index:2;text-align:center;max-width:700px;padding:0 20px}
+    .hero-badge{
+      display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--deep-gold);border:1px solid rgba(201,168,76,0.35);border-radius:100px;
+      padding:6px 16px;margin-bottom:24px;
+    }
+    .hero h1{
+      font-family:var(--font-head);font-size:2.75rem;font-weight:700;color:var(--cream-white);
+      letter-spacing:-0.02em;line-height:1.1;margin-bottom:16px;
+    }
+    .hero h1 span{color:var(--deep-gold)}
+    .hero p{
+      font-size:1.05rem;color:rgba(255,255,255,0.8);line-height:1.7;
+      max-width:520px;margin:0 auto 32px;
+    }
+    .hero .cta-primary{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      background:var(--deep-gold);color:var(--navy);border:none;border-radius:100px;
+      font-family:var(--font-body);font-size:1.05rem;font-weight:700;
+      padding:18px 36px;min-height:56px;min-width:240px;
+      cursor:pointer;transition:background .3s,transform .25s,box-shadow .3s;
+      text-decoration:none;
+    }
+    .hero .cta-primary:hover{
+      background:#dbb956;transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,0.35);
+    }
+    .hero .cta-primary:focus-visible{outline:3px solid var(--deep-gold);outline-offset:4px}
+    .trust-line{
+      font-size:.85rem;color:rgba(255,255,255,0.55);margin-top:20px;
+      letter-spacing:.02em;
+    }
+
+    /* SOCIAL PROOF */
+    .social-proof{
+      background:var(--cream-white);padding:36px 0;text-align:center;
+      border-bottom:1px solid rgba(26,42,58,0.06);
+    }
+    .social-proof p{
+      font-size:.9rem;color:var(--warm-grey);font-weight:500;margin-bottom:20px;
+      letter-spacing:.03em;
+    }
+    .proof-logos{
+      display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:24px 36px;
+    }
+    .proof-logos span{
+      font-size:.8rem;font-weight:600;color:var(--warm-grey);
+      letter-spacing:.04em;text-transform:uppercase;opacity:.6;
+    }
+
+    /* FORM SECTION */
+    .form-section{
+      padding:60px 0 80px;position:relative;
+    }
+    .form-card{
+      background:var(--cream-white);border-radius:var(--radius);
+      box-shadow:var(--shadow-lg);padding:36px 28px;max-width:560px;margin:0 auto;
+      border:1px solid rgba(26,42,58,0.06);
+    }
+    .form-card h2{
+      font-family:var(--font-head);font-size:1.6rem;font-weight:600;color:var(--navy);
+      margin-bottom:6px;
+    }
+    .form-card .form-subtitle{
+      font-size:.9rem;color:var(--warm-grey);margin-bottom:28px;
+    }
+    .form-row{display:grid;gap:16px}
+    .form-group{display:flex;flex-direction:column;gap:5px}
+    .form-group label{
+      font-size:.82rem;font-weight:600;color:var(--charcoal);
+      letter-spacing:.01em;
+    }
+    .form-group label .required{color:#C0392B;margin-left:2px}
+    .form-group input,.form-group select{
+      font-family:var(--font-body);font-size:.95rem;color:var(--charcoal);
+      background:var(--warm-paper);border:2px solid rgba(26,42,58,0.1);
+      border-radius:var(--radius-sm);padding:12px 14px;min-height:48px;
+      transition:border-color .25s,box-shadow .25s;width:100%;
+      -webkit-appearance:none;appearance:none;
+    }
+    .form-group select{
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B6B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;
+    }
+    .form-group input:focus,.form-group select:focus{
+      outline:none;border-color:var(--deep-gold);box-shadow:0 0 0 3px rgba(201,168,76,0.2);
+    }
+    .form-group input.error,.form-group select.error{
+      border-color:#C0392B;box-shadow:0 0 0 3px rgba(192,57,43,0.15);
+    }
+    .error-msg{font-size:.78rem;color:#C0392B;min-height:0;transition:min-height .25s}
+    .error-msg.show{min-height:20px}
+
+    .checkbox-group{
+      display:flex;flex-direction:column;gap:10px;margin-top:4px;
+    }
+    .checkbox-label{
+      display:flex;align-items:center;gap:10px;cursor:pointer;
+      font-size:.88rem;color:var(--charcoal);min-height:48px;
+    }
+    .checkbox-label input[type="checkbox"]{
+      width:20px;height:20px;min-width:20px;accent-color:var(--deep-gold);
+      cursor:pointer;
+    }
+    .form-submit{
+      width:100%;margin-top:8px;
+      background:var(--navy);color:var(--cream-white);border:none;border-radius:100px;
+      font-family:var(--font-body);font-size:1rem;font-weight:600;
+      padding:16px 24px;min-height:52px;cursor:pointer;
+      transition:background .3s,transform .25s;display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .form-submit:hover{background:#1f3347;transform:translateY(-1px)}
+    .form-submit:focus-visible{outline:3px solid var(--deep-gold);outline-offset:4px}
+    .form-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .form-footnote{
+      font-size:.78rem;color:var(--warm-grey);text-align:center;margin-top:16px;
+    }
+
+    /* SUCCESS STATE */
+    .success-state{display:none;text-align:center;padding:10px 0}
+    .success-state.show{display:block}
+    .success-icon{
+      font-size:3rem;margin-bottom:12px;display:block;
+    }
+    .success-state h2{
+      font-family:var(--font-head);font-size:1.6rem;font-weight:600;color:var(--navy);
+      margin-bottom:8px;
+    }
+    .voucher-code{
+      display:inline-block;background:var(--warm-paper);border:2px dashed var(--deep-gold);
+      border-radius:var(--radius-sm);padding:14px 28px;margin:16px 0;
+      font-family:var(--font-head);font-size:1.15rem;font-weight:600;
+      color:var(--navy);letter-spacing:.08em;
+    }
+    .voucher-label{font-size:.78rem;color:var(--warm-grey);margin-top:4px}
+    .success-message{font-size:1rem;color:var(--charcoal);line-height:1.7;margin:16px 0 24px}
+    .wallet-buttons{
+      display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:20px;
+    }
+    .wallet-btn{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--navy);color:var(--cream-white);border:none;border-radius:100px;
+      font-family:var(--font-body);font-size:.88rem;font-weight:600;
+      padding:12px 22px;min-height:48px;cursor:pointer;
+      transition:background .25s,transform .2s;text-decoration:none;
+    }
+    .wallet-btn:hover{background:var(--deep-gold);color:var(--navy);transform:translateY(-1px)}
+    .gift-guide-link{
+      display:inline-flex;align-items:center;gap:6px;
+      color:var(--deep-gold);font-weight:600;font-size:.95rem;text-decoration:none;
+      transition:color .25s;
+    }
+    .gift-guide-link:hover{color:var(--navy)}
+
+    /* BENEFITS */
+    .benefits{
+      padding:60px 0;background:var(--navy);color:var(--cream-white);
+    }
+    .benefits h2{
+      font-family:var(--font-head);font-size:1.6rem;font-weight:600;text-align:center;
+      margin-bottom:36px;color:var(--cream-white);
+    }
+    .benefits h2 span{color:var(--deep-gold)}
+    .benefits-grid{
+      display:flex;gap:20px;overflow-x:auto;
+      scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+      padding-bottom:12px;scrollbar-width:none;
+    }
+    .benefits-grid::-webkit-scrollbar{display:none}
+    .benefit-card{
+      flex:0 0 260px;scroll-snap-align:start;
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);
+      border-radius:var(--radius);padding:28px 22px;text-align:center;
+      transition:background .3s,transform .25s;min-height:200px;
+    }
+    .benefit-card:hover{background:rgba(255,255,255,0.1);transform:translateY(-3px)}
+    .benefit-icon{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:56px;height:56px;border-radius:50%;
+      background:rgba(201,168,76,0.15);margin-bottom:16px;
+    }
+    .benefit-icon svg{width:26px;height:26px;color:var(--deep-gold)}
+    .benefit-card h3{
+      font-family:var(--font-head);font-size:1.15rem;font-weight:600;color:var(--cream-white);
+      margin-bottom:8px;
+    }
+    .benefit-card p{font-size:.88rem;color:rgba(255,255,255,0.7);line-height:1.6}
+
+    /* TESTIMONIALS */
+    .testimonials{
+      padding:60px 0;background:var(--warm-paper);
+    }
+    .testimonials h2{
+      font-family:var(--font-head);font-size:1.6rem;font-weight:600;
+      text-align:center;color:var(--navy);margin-bottom:36px;
+    }
+    .testimonial-grid{
+      display:grid;grid-template-columns:1fr;gap:20px;max-width:720px;margin:0 auto;
+    }
+    .testimonial-card{
+      background:var(--cream-white);border-radius:var(--radius);
+      padding:28px 24px;box-shadow:var(--shadow);
+      border:1px solid rgba(26,42,58,0.05);
+    }
+    .stars{display:flex;gap:3px;margin-bottom:12px}
+    .stars svg{width:18px;height:18px;color:var(--deep-gold)}
+    .testimonial-card blockquote{
+      font-size:.95rem;color:var(--charcoal);line-height:1.7;
+      font-style:italic;margin-bottom:12px;
+    }
+    .testimonial-card blockquote::before{content:'\201C';color:var(--deep-gold);font-family:var(--font-head);font-size:1.8rem;line-height:0;vertical-align:-6px;margin-right:4px}
+    .testimonial-author{
+      font-size:.85rem;color:var(--warm-grey);font-weight:500;
+    }
+
+    /* FOOTER */
+    footer{
+      background:var(--navy);color:var(--cream-white);padding:48px 0 24px;
+    }
+    .footer-grid{
+      display:grid;grid-template-columns:1fr;gap:32px;margin-bottom:32px;
+    }
+    .footer-col h4{
+      font-family:var(--font-head);font-size:1.1rem;font-weight:600;color:var(--cream-white);
+      margin-bottom:12px;
+    }
+    .footer-col p,.footer-col li{font-size:.85rem;color:rgba(255,255,255,0.65);line-height:1.8}
+    .footer-col ul{list-style:none;padding:0}
+    .footer-col ul li a{color:rgba(255,255,255,0.65);text-decoration:none;transition:color .25s;min-height:44px;display:inline-flex;align-items:center}
+    .footer-col ul li a:hover{color:var(--deep-gold)}
+
+    /* branch list */
+    .branch-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px 16px}
+    .branch-list li{font-size:.82rem;color:rgba(255,255,255,0.65)}
+
+    /* map placeholder */
+    .map-placeholder{
+      width:100%;height:120px;border-radius:var(--radius-sm);
+      background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(26,42,58,0.3));
+      border:1px solid rgba(255,255,255,0.08);display:flex;
+      align-items:center;justify-content:center;margin-top:8px;
+      font-size:.8rem;color:rgba(255,255,255,0.4);gap:6px;
+    }
+
+    .social-links{display:flex;gap:12px;margin-top:8px}
+    .social-links a{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:48px;height:48px;border-radius:50%;
+      background:rgba(255,255,255,0.08);color:var(--cream-white);
+      transition:background .25s,color .25s;min-width:48px;
+    }
+    .social-links a:hover{background:var(--deep-gold);color:var(--navy)}
+    .social-links svg{width:20px;height:20px}
+
+    .footer-bottom{
+      border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;
+      display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;
+    }
+    .footer-bottom p{font-size:.78rem;color:rgba(255,255,255,0.4)}
+    .footer-bottom-links{display:flex;gap:16px;flex-wrap:wrap}
+    .footer-bottom-links a{font-size:.78rem;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .25s}
+    .footer-bottom-links a:hover{color:var(--deep-gold)}
+
+    /* QR placeholder */
+    .qr-placeholder{
+      display:inline-flex;flex-direction:column;align-items:center;gap:8px;margin-top:12px;
+    }
+    .qr-visual{
+      width:72px;height:72px;border-radius:6px;padding:8px;
+      background:var(--cream-white);
+      display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);
+      gap:2px;
+    }
+    .qr-visual .dot{background:var(--navy);border-radius:1px}
+    .qr-visual .dot:nth-child(1),
+    .qr-visual .dot:nth-child(2),
+    .qr-visual .dot:nth-child(3),
+    .qr-visual .dot:nth-child(4),
+    .qr-visual .dot:nth-child(5),
+    .qr-visual .dot:nth-child(6),
+    .qr-visual .dot:nth-child(10),
+    .qr-visual .dot:nth-child(11),
+    .qr-visual .dot:nth-child(15),
+    .qr-visual .dot:nth-child(16),
+    .qr-visual .dot:nth-child(20),
+    .qr-visual .dot:nth-child(21),
+    .qr-visual .dot:nth-child(22),
+    .qr-visual .dot:nth-child(23),
+    .qr-visual .dot:nth-child(24),
+    .qr-visual .dot:nth-child(25){background:var(--navy)}
+    .qr-visual .dot:nth-child(7),
+    .qr-visual .dot:nth-child(8),
+    .qr-visual .dot:nth-child(9),
+    .qr-visual .dot:nth-child(12),
+    .qr-visual .dot:nth-child(13),
+    .qr-visual .dot:nth-child(14),
+    .qr-visual .dot:nth-child(17),
+    .qr-visual .dot:nth-child(18),
+    .qr-visual .dot:nth-child(19){background:transparent}
+    .qr-label{font-size:.68rem;color:rgba(255,255,255,0.5);letter-spacing:.04em}
+
+    /* SCROLL ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-delay-1{transition-delay:.1s}
+    .reveal-delay-2{transition-delay:.2s}
+    .reveal-delay-3{transition-delay:.3s}
+
+    /* TABLET */
+    @media(min-width:481px){
+      .hero h1{font-size:3.2rem}
+      .form-row.grid-2{grid-template-columns:1fr 1fr}
+      .benefits-grid{gap:24px}
+      .testimonial-grid{grid-template-columns:1fr 1fr}
+      .footer-grid{grid-template-columns:1fr 1fr}
+    }
+
+    /* SMALL DESKTOP */
+    @media(min-width:769px){
+      :root{--radius:16px}
+      nav{padding:18px 0}
+      .logo{font-size:1.5rem}
+      .hero{padding:120px 0 80px}
+      .hero h1{font-size:3.6rem}
+      .hero p{font-size:1.15rem}
+      .trust-line{font-size:.9rem}
+      .form-section{padding:80px 0 100px}
+      .form-card{padding:44px 40px}
+      .benefits-grid{gap:28px;overflow-x:visible;display:grid;grid-template-columns:repeat(3,1fr)}
+      .benefit-card{flex:unset}
+      .testimonials{padding:80px 0}
+      .footer-grid{grid-template-columns:2fr 1fr 1fr;gap:48px}
+      .footer{margin-top:8px}
+    }
+
+    /* LARGE DESKTOP */
+    @media(min-width:1025px){
+      .hero h1{font-size:4rem}
+      .hero p{font-size:1.2rem;max-width:580px}
+      .form-card{padding:52px 48px}
+      .benefits{padding:80px 0}
+      .benefits h2{font-size:1.8rem;margin-bottom:48px}
+      .testimonial-card{padding:32px 28px}
+      .container{padding:0 32px}
+    }
+
+    /* reduced motion */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+      .reveal{opacity:1;transform:none}
+    }
+
+    /* focus visible */
+    :focus-visible{outline:3px solid var(--deep-gold);outline-offset:2px}
+    button:focus-visible,a:focus-visible{outline:3px solid var(--deep-gold);outline-offset:3px}
+
+    /* selection */
+    ::selection{background:var(--deep-gold);color:var(--navy)}
+  </style>
+</head>
+<body>
+  <a href="#form" class="sr-only">Skip to sign-up form</a>
+
+  <!-- NAV -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="#" class="logo-link" aria-label="Inkwell Books home">
+        <span class="logo">Inkwell<span>.</span></span>
+      </a>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="nav-cta" onclick="document.getElementById('form').scrollIntoView({behavior:'smooth'})" aria-label="Join The Inkwell List">Join the List</button>
+        <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV OVERLAY -->
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navigation menu" aria-hidden="true">
+    <a href="#form" onclick="closeNav()">Join the List</a>
+    <a href="#benefits" onclick="closeNav()">Benefits</a>
+    <a href="#testimonials" onclick="closeNav()">Testimonials</a>
+    <a href="#branches" onclick="closeNav()">Our Branches</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero" aria-label="The Inkwell List campaign hero">
+    <div class="hero-bg" role="img" aria-label="Warm bookshop interior with shelves"></div>
+    <div class="hero-content reveal visible">
+      <span class="hero-badge">9 Branches · One Community</span>
+      <h1>The Inkwell <span>List</span></h1>
+      <p>The best books arrive before the season does. Join the list.</p>
+      <a href="#form" class="cta-primary" aria-label="Join The Inkwell List — It's Free">
+        Join the List — It's Free
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </a>
+      <p class="trust-line">9 branches. Zero spam. One community.</p>
+      <!-- QR placeholder -->
+      <div class="qr-placeholder">
+        <div class="qr-visual" aria-hidden="true">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <span class="qr-label">Scan in-store to join</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="social-proof" aria-label="Social proof">
+    <div class="container">
+      <p>Join readers across <strong style="color:var(--navy)">9 neighbourhoods</strong></p>
+      <div class="proof-logos">
+        <span>Penguin Random House</span>
+        <span>HarperCollins</span>
+        <span>Simon &amp; Schuster</span>
+        <span>Hachette</span>
+        <span>Macmillan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="form-section" id="form" aria-label="Sign-up form">
+    <div class="container">
+      <div class="form-card" id="formCard">
+        <!-- FORM -->
+        <div id="formView">
+          <h2>Start your Inkwell List membership</h2>
+          <p class="form-subtitle">Free to join · €5 welcome voucher · Unsubscribe anytime</p>
+          <form id="signupForm" novalidate aria-label="Inkwell List sign-up form">
+            <div class="form-row grid-2">
+              <div class="form-group">
+                <label for="firstName">First name <span class="required" aria-hidden="true">*</span></label>
+                <input type="text" id="firstName" name="firstName" required minlength="2" maxlength="50"
+                  placeholder="Your first name" autocomplete="given-name" aria-required="true"
+                  aria-describedby="firstNameError">
+                <span class="error-msg" id="firstNameError" role="alert"></span>
+              </div>
+              <div class="form-group">
+                <label for="email">Email address <span class="required" aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" required
+                  placeholder="you@example.com" autocomplete="email" aria-required="true"
+                  aria-describedby="emailError">
+                <span class="error-msg" id="emailError" role="alert"></span>
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:16px">
+              <div class="form-group">
+                <label for="genre">Favourite genre <span class="required" aria-hidden="true">*</span></label>
+                <select id="genre" name="genre" required aria-required="true" aria-describedby="genreError">
+                  <option value="" disabled selected>Select your favourite genre</option>
+                  <option value="Literary Fiction">Literary Fiction</option>
+                  <option value="Mystery / Thriller">Mystery / Thriller</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Sci-Fi / Fantasy">Sci-Fi / Fantasy</option>
+                  <option value="Non-Fiction / Memoir">Non-Fiction / Memoir</option>
+                  <option value="Historical Fiction">Historical Fiction</option>
+                  <option value="Young Adult">Young Adult</option>
+                  <option value="Not sure — surprise me!">Not sure — surprise me!</option>
+                </select>
+                <span class="error-msg" id="genreError" role="alert"></span>
+              </div>
+            </div>
+            <div class="checkbox-group" style="margin-top:20px">
+              <label class="checkbox-label">
+                <input type="checkbox" name="voucherOptin" checked>
+                <span>I want the <strong>€5 welcome voucher</strong> for my next book</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="weeklyOptin" checked>
+                <span>Send me <strong>weekly staff picks</strong> curated for my taste</span>
+              </label>
+            </div>
+            <button type="submit" class="form-submit" id="submitBtn">
+              Join The Inkwell List
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </button>
+            <p class="form-footnote">No spam. Unsubscribe anytime. Your data is safe with us.</p>
+          </form>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="success-state" id="successView" role="status" aria-live="polite">
+          <span class="success-icon" aria-hidden="true">✅</span>
+          <h2>You're on The Inkwell List!</h2>
+          <div class="voucher-code" id="voucherDisplay">INKWELL-5-XXXXX</div>
+          <p class="voucher-label">Your voucher code — valid for 60 days</p>
+          <p class="success-message">Your first email is on its way — with a staff pick just for you.</p>
+          <div class="wallet-buttons">
+            <button class="wallet-btn" aria-label="Add to Apple Wallet">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+              Add to Apple Wallet
+            </button>
+            <button class="wallet-btn" aria-label="Add to Google Wallet">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+              Add to Google Wallet
+            </button>
+          </div>
+          <a href="#" class="gift-guide-link" aria-label="Browse our Christmas Gift Guide">
+            Browse our Christmas Gift Guide
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="benefits" id="benefits" aria-label="Membership benefits">
+    <div class="container">
+      <h2>Why join <span>The Inkwell List</span></h2>
+      <div class="benefits-grid">
+        <div class="benefit-card reveal" role="article">
+          <div class="benefit-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+          </div>
+          <h3>€5 off your first book</h3>
+          <p>Any book, any branch, no minimum spend. Your welcome voucher arrives by email — use it in-store or online.</p>
+        </div>
+        <div class="benefit-card reveal reveal-delay-1" role="article">
+          <div class="benefit-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3>Digital loyalty card</h3>
+          <p>Buy 8 books, get 1 free. Your card lives in Apple Wallet or Google Wallet — no paper to lose.</p>
+        </div>
+        <div class="benefit-card reveal reveal-delay-2" role="article">
+          <div class="benefit-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </div>
+          <h3>Curated picks for you</h3>
+          <p>Tell us your favourite genres and get staff picks selected by real booksellers who know their shelves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials" aria-label="What readers are saying">
+    <div class="container">
+      <h2>What readers are saying</h2>
+      <div class="testimonial-grid">
+        <div class="testimonial-card reveal" role="article">
+          <div class="stars" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <blockquote>I'd forgotten how much I loved Inkwell. Now I get book recs in my inbox and a free book every 8th purchase. Magic.</blockquote>
+          <cite class="testimonial-author">— Sarah, 31, Architect</cite>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-1" role="article">
+          <div class="stars" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <blockquote>The Christmas gift guide saved me last year. Everything arrived wrapped.</blockquote>
+          <cite class="testimonial-author">— Tom, 44, Teacher</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="branches" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Inkwell Books</h4>
+          <p>Independent bookshops across 9 Dublin neighbourhoods. Real people, real recommendations, since 2008.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Follow us on Instagram" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="Follow us on TikTok" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 12a4 4 0 1 0 4 4V4h3a3 3 0 0 0 3 3"/><path d="M12 8h3a3 3 0 0 0 3-3"/></svg>
+            </a>
+            <a href="#" aria-label="Follow us on X (formerly Twitter)" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
+          <div class="qr-placeholder" style="align-items:flex-start">
+            <div class="qr-visual" aria-hidden="true" style="width:56px;height:56px">
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <span class="qr-label" style="color:rgba(255,255,255,0.4)">Scan to join</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Our Branches</h4>
+          <ul class="branch-list" aria-label="List of 9 Inkwell branch locations">
+            <li>Grafton Street</li>
+            <li>Dawson Street</li>
+            <li>Temple Bar</li>
+            <li>Rathmines</li>
+            <li>Dún Laoghaire</li>
+            <li>Blackrock</li>
+            <li>Stillorgan</li>
+            <li>Malahide</li>
+            <li>Howth</li>
+          </ul>
+          <div class="map-placeholder" aria-label="Branch locator map placeholder">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Map of 9 Dublin branches</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#" aria-label="Unsubscribe from emails">Unsubscribe</a></li>
+            <li><a href="#" aria-label="Privacy policy">Privacy Policy</a></li>
+            <li><a href="#" aria-label="Terms and conditions">Terms &amp; Conditions</a></li>
+            <li><a href="#" aria-label="Contact us">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Inkwell Books Ltd. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#" aria-label="Privacy policy">Privacy</a>
+          <a href="#" aria-label="Terms">Terms</a>
+          <a href="#" aria-label="Cookie policy">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      'use strict';
+
+      const NAV = document.getElementById('navbar');
+      const HAMBURGER = document.getElementById('hamburger');
+      const OVERLAY = document.getElementById('navOverlay');
+      const FORM = document.getElementById('signupForm');
+      const FORM_VIEW = document.getElementById('formView');
+      const SUCCESS_VIEW = document.getElementById('successView');
+      const VOUCHER_DISPLAY = document.getElementById('voucherDisplay');
+      const SUBMIT_BTN = document.getElementById('submitBtn');
+
+      // scroll nav
+      function onScroll(){
+        NAV.classList.toggle('scrolled', window.scrollY > 60);
+      }
+      window.addEventListener('scroll', onScroll, {passive:true});
+      onScroll();
+
+      // hamburger
+      function toggleNav(){
+        const open = OVERLAY.classList.toggle('open');
+        HAMBURGER.classList.toggle('active');
+        HAMBURGER.setAttribute('aria-expanded', open);
+        OVERLAY.setAttribute('aria-hidden', !open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+      function closeNav(){
+        OVERLAY.classList.remove('open');
+        HAMBURGER.classList.remove('active');
+        HAMBURGER.setAttribute('aria-expanded', 'false');
+        OVERLAY.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+      HAMBURGER.addEventListener('click', toggleNav);
+      OVERLAY.addEventListener('click', function(e){
+        if(e.target === OVERLAY) closeNav();
+      });
+
+      // voucher generator
+      function generateVoucher(){
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for(let i=0;i<5;i++) code += chars.charAt(Math.floor(Math.random()*chars.length));
+        return 'INKWELL-5-' + code;
+      }
+
+      // field validation
+      const fields = {
+        firstName: {
+          el: document.getElementById('firstName'),
+          error: document.getElementById('firstNameError'),
+          validate: function(v){
+            if(!v.trim()) return 'Please enter your first name';
+            if(v.trim().length < 2) return 'Name must be at least 2 characters';
+            if(v.trim().length > 50) return 'Name must be under 50 characters';
+            return '';
+          }
+        },
+        email: {
+          el: document.getElementById('email'),
+          error: document.getElementById('emailError'),
+          validate: function(v){
+            if(!v.trim()) return 'Please enter your email address';
+            if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())) return 'Please enter a valid email address';
+            return '';
+          }
+        },
+        genre: {
+          el: document.getElementById('genre'),
+          error: document.getElementById('genreError'),
+          validate: function(v){
+            if(!v) return 'Please select your favourite genre';
+            return '';
+          }
+        }
+      };
+
+      function validateField(name){
+        const f = fields[name];
+        const msg = f.validate(f.el.value);
+        f.error.textContent = msg;
+        f.error.classList.toggle('show', !!msg);
+        f.el.classList.toggle('error', !!msg);
+        return !msg;
+      }
+
+      function clearFieldError(name){
+        const f = fields[name];
+        f.error.textContent = '';
+        f.error.classList.remove('show');
+        f.el.classList.remove('error');
+      }
+
+      Object.keys(fields).forEach(function(name){
+        const f = fields[name];
+        f.el.addEventListener('blur', function(){ validateField(name); });
+        f.el.addEventListener('input', function(){ clearFieldError(name); });
+        f.el.addEventListener('change', function(){
+          if(name === 'genre') validateField(name);
+        });
+      });
+
+      // form submit
+      FORM.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        let valid = true;
+        Object.keys(fields).forEach(function(name){
+          if(!validateField(name)) valid = false;
+        });
+
+        if(!valid){
+          const firstErr = document.querySelector('.form-group input.error, .form-group select.error');
+          if(firstErr) firstErr.focus();
+          return;
+        }
+
+        // generate voucher
+        const voucher = generateVoucher();
+
+        // build data for localStorage
+        const formData = {
+          firstName: fields.firstName.el.value.trim(),
+          email: fields.email.el.value.trim(),
+          genre: fields.genre.el.value,
+          voucherOptin: document.querySelector('[name="voucherOptin"]').checked,
+          weeklyOptin: document.querySelector('[name="weeklyOptin"]').checked,
+          voucher: voucher,
+          signedUpAt: new Date().toISOString(),
+          signupSource: 'landing_page'
+        };
+
+        // store in localStorage
+        try {
+          const existing = JSON.parse(localStorage.getItem('inkwell_signups') || '[]');
+          existing.push(formData);
+          localStorage.setItem('inkwell_signups', JSON.stringify(existing));
+          localStorage.setItem('inkwell_current_user', JSON.stringify(formData));
+        } catch(e) { /* storage full or unavailable */ }
+
+        // show success
+        VOUCHER_DISPLAY.textContent = voucher;
+        FORM_VIEW.style.display = 'none';
+        SUCCESS_VIEW.classList.add('show');
+
+        // track event if plausible available
+        if(typeof window.plausible === 'function'){
+          window.plausible('Signup', {props: {genre: formData.genre}});
+        }
+      });
+
+      // scroll reveal animations
+      function initReveal(){
+        if(window.IntersectionObserver){
+          const observer = new IntersectionObserver(function(entries){
+            entries.forEach(function(entry){
+              if(entry.isIntersecting){
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, {threshold: 0.15, rootMargin: '0px 0px -40px 0px'});
+
+          document.querySelectorAll('.reveal').forEach(function(el){
+            observer.observe(el);
+          });
+        } else {
+          document.querySelectorAll('.reveal').forEach(function(el){
+            el.classList.add('visible');
+          });
+        }
+      }
+      if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', initReveal);
+      } else {
+        initReveal();
+      }
+
+      // re-observe after success
+      const successObserver = new MutationObserver(function(){
+        if(SUCCESS_VIEW.classList.contains('show')){
+          document.querySelectorAll('.success-state .reveal').forEach(function(el){
+            el.classList.add('visible');
+          });
+        }
+      });
+      if(SUCCESS_VIEW) successObserver.observe(SUCCESS_VIEW, {attributes:true, attributeFilter:['class']});
+
+    })();
+  </script>
+</body>
+</html>
